@@ -291,7 +291,7 @@ def get_feature_extractor(policy, **kwargs):
 
 #TODO : include in randconv : (Const.FEATEXT_ALL, {}), (Const.FEATEXT_SPASUB, {"nbCol":2})
 def randconv_factory(
-        nb_filterss=5,
+        nb_filters=5,
         filter_policy=(Const.FGEN_ZEROPERT,
                        {"min_size": 2, "max_size": 32, "min_val": -1, "max_val": 1,
                         "value_generator": Const.RND_RU,

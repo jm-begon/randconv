@@ -9,7 +9,6 @@ __version__ = 'dev'
 
 import os
 import shutil
-import randconv
 from distutils.command.clean import clean as Clean
 
 def main_dir():
@@ -63,7 +62,7 @@ def setup_package():
                     author='Jean-Michel Begon',
                     author_email='jm.begon@gmail.com',
                     description='Random and convolutional tree-based image classification',
-                    version=randconv.__version__,
+                    version="dev",
                     long_description=long_desc,
                     license=lic,
                     classifiers=['Intended Audience :: Science/Research',

@@ -185,13 +185,13 @@ class ImageBuffer:
         else:
             return self.get(index)
 
-    def getLabels(self):
+    def get_labels(self):
         """
         Return the label vector.
         """
         return [label for _, label in self._imageSeq]
 
-    def nbBands(self):
+    def nb_bands(self):
         if self._outputFormat == ImageBuffer.PIL_FORMAT:
             return _pilNbBands(self.get(0)[0])
         else:
@@ -341,5 +341,5 @@ class FileImageBuffer(ImageBuffer):
 #         img = self._imgBuff.get(index)
 #         return self._shuffler.shuffle(img)
 
-#     def getLabels(self):
-#         return self._imgBuff.getLabels()
+#     def get_labels(self):
+#         return self._imgBuff.get_labels()

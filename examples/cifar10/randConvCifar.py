@@ -9,34 +9,33 @@ from time import time
 
 from sklearn.ensemble import ExtraTreesClassifier
 
-from CoordinatorFactory import Const, coordinatorRandConvFactory
-from Classifier import Classifier
-from SubWindowExtractor import SubWindowExtractor
-from FilterGenerator import FilterGenerator
-from CifarLoader import CifarFromNumpies
-from ImageBuffer import FileImageBuffer, NumpyImageLoader
-from Logger import formatDuration
+from randconv import randconv_factory, Classifier, Const
+from randconv.image import (SubWindowExtractor, FilterGenerator,
+                            FileImageBuffer, NumpyImageLoader)
+from progressmonitor import format_duration
+
+from .cifardb import *
 
 #======PROB MATRIX=========#
-saveFile = "rc_"
-shouldSave = True
+save_file = "rc_"
+should_save = True
 #======HYPER PARAMETERS======#
 #----RandConv param
 #Filtering
 nb_filters = 100
-#filterPolicy = (Const.FGEN_ZEROPERT, {"minSize":2, "maxSize":10, "minVal":-1, "maxVal":1, "valGen":Const.RND_RU, "normalization":FilterGenerator.NORMALISATION_NONE})
-filterPolicy = (Const.FGEN_ZEROPERT, {"minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_SET, "probLaw":[(-1, 0.3), (0, 0.4), (1, 0.3)], "normalization":FilterGenerator.NORMALISATION_NONE})
-#filterPolicy = (Const.FGEN_IDPERT, {"minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_RU})
-#filterPolicy = (Const.FGEN_IDPERT, {"minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_GAUSS, "outRange":0.05})
-#filterPolicy = (Const.FGEN_IDDIST, {"minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_RU, "maxDist":5})
-#filterPolicy = (Const.FGEN_STRAT, {"minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_GAUSS,  "outRange":0.001, "strat_nbCells":10, "minPerturbation":0, "maxPerturbation":1})
+#filter_policy = (Const.FGEN_ZEROPERT, {"minSize":2, "maxSize":10, "minVal":-1, "maxVal":1, "valGen":Const.RND_RU, "normalization":FilterGenerator.NORMALISATION_NONE})
+filter_policy = (Const.FGEN_ZEROPERT, {"minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_SET, "probLaw":[(-1, 0.3), (0, 0.4), (1, 0.3)], "normalization":FilterGenerator.NORMALISATION_NONE})
+#filter_policy = (Const.FGEN_IDPERT, {"minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_RU})
+#filter_policy = (Const.FGEN_IDPERT, {"minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_GAUSS, "outRange":0.05})
+#filter_policy = (Const.FGEN_IDDIST, {"minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_RU, "maxDist":5})
+#filter_policy = (Const.FGEN_STRAT, {"minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_GAUSS,  "outRange":0.001, "strat_nbCells":10, "minPerturbation":0, "maxPerturbation":1})
 #
-#filterPolicy = (Const.FGEN_ZEROPERT, {"sparseProb":0.25, "minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_RU, "normalization":FilterGenerator.NORMALISATION_NONE})
-#filterPolicy = (Const.FGEN_ZEROPERT, {"sparseProb":0.25, "minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_SET, "probLaw":[(-1, 0.3), (0, 0.4), (1, 0.3)], "normalization":FilterGenerator.NORMALISATION_NONE})
-#filterPolicy = (Const.FGEN_IDPERT, {"sparseProb":0.25, "minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_RU})
-#filterPolicy = (Const.FGEN_IDPERT, {"sparseProb":0.25, "minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_GAUSS, "outRange":0.05})
-#filterPolicy = (Const.FGEN_IDDIST, {"sparseProb":0.25, "minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_RU, "maxDist":5})
-#filterPolicy = (Const.FGEN_STRAT, {"sparseProb":0.25, "minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_GAUSS,  "outRange":0.001, "strat_nbCells":10, "minPerturbation":0, "maxPerturbation":1})
+#filter_policy = (Const.FGEN_ZEROPERT, {"sparseProb":0.25, "minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_RU, "normalization":FilterGenerator.NORMALISATION_NONE})
+#filter_policy = (Const.FGEN_ZEROPERT, {"sparseProb":0.25, "minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_SET, "probLaw":[(-1, 0.3), (0, 0.4), (1, 0.3)], "normalization":FilterGenerator.NORMALISATION_NONE})
+#filter_policy = (Const.FGEN_IDPERT, {"sparseProb":0.25, "minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_RU})
+#filter_policy = (Const.FGEN_IDPERT, {"sparseProb":0.25, "minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_GAUSS, "outRange":0.05})
+#filter_policy = (Const.FGEN_IDDIST, {"sparseProb":0.25, "minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_RU, "maxDist":5})
+#filter_policy = (Const.FGEN_STRAT, {"sparseProb":0.25, "minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_GAUSS,  "outRange":0.001, "strat_nbCells":10, "minPerturbation":0, "maxPerturbation":1})
 
 #Aggregation
 poolings = [
@@ -52,21 +51,21 @@ extractor = (Const.FEATEXT_ALL, {})
 #extractor =  (Const.FEATEXT_SPASUB, {"nbCol":1})
 
 #Subwindow
-nbSubwindows = 10
-subwindowMinSizeRatio = 0.75
-subwindowMaxSizeRatio = 1.
-subwindowTargetWidth = 16
-subwindowTargetHeight = 16
+nb_subwindows = 10
+sw_min_size_ratio = 0.75
+sw_max_size_ratio = 1.
+sw_target_width = 16
+sw_target_height = 16
 fixedSize = False
-subwindowInterpolation = SubWindowExtractor.INTERPOLATION_NEAREST
+sw_interpolation = SubWindowExtractor.INTERPOLATION_NEAREST
 
 #Misc.
-includeOriginalImage = True
+include_original_img = True
 random = False
-nbJobs = -1
+n_jobs = -1
 verbosity = 40
-#tempFolder = "/dev/shm"
-tempFolder = "/home/jmbegon/jmbegon/code/work/tmp"
+#temp_folder = "/dev/shm"
+temp_folder = "/home/jmbegon/jmbegon/code/work/tmp"
 
 #-----Extratree param
 nbTrees = 30
@@ -75,82 +74,82 @@ maxDepth = None
 minSamplesSplit = 2
 minSamplesLeaf = 1
 bootstrap = False
-randomClassif = True
-nbJobsEstimator = -1
+random_classif = True
+n_jobsEstimator = -1
 verbose = 8
 
 #=====DATA=====#
 maxLearningSize = 50000
 maxTestingSize = 10000
 
-learningUse = 50000
+learning_use = 500
 learningSetDir = "learn/"
 learningIndexFile = "0index"
 
-testingUse = 10000
+testing_use = 100
 testingSetDir = "test/"
 testingIndexFile = "0index"
 
 
 def run(nb_filters=nb_filters,
-        filterPolicy=filterPolicy,
+        filter_policy=filter_policy,
         poolings=poolings,
         extractor=extractor,
-        nbSubwindows=nbSubwindows,
-        subwindowMinSizeRatio=subwindowMinSizeRatio,
-        subwindowMaxSizeRatio=subwindowMaxSizeRatio,
-        subwindowTargetWidth=subwindowTargetWidth,
-        subwindowTargetHeight=subwindowTargetHeight,
+        nb_subwindows=nb_subwindows,
+        sw_min_size_ratio=sw_min_size_ratio,
+        sw_max_size_ratio=sw_max_size_ratio,
+        sw_target_width=sw_target_width,
+        sw_target_height=sw_target_height,
         fixedSize=fixedSize,
-        subwindowInterpolation=subwindowInterpolation,
-        includeOriginalImage=includeOriginalImage,
+        sw_interpolation=sw_interpolation,
+        include_original_img=include_original_img,
         random=random,
-        nbJobs=nbJobs,
+        n_jobs=n_jobs,
         verbosity=verbosity,
-        tempFolder=tempFolder,
+        temp_folder=temp_folder,
         nbTrees=nbTrees,
         maxFeatures=maxFeatures,
         maxDepth=maxDepth,
         minSamplesSplit=minSamplesSplit,
         minSamplesLeaf=minSamplesLeaf,
         bootstrap=bootstrap,
-        randomClassif=randomClassif,
-        nbJobsEstimator=nbJobsEstimator,
+        random_classif=random_classif,
+        n_jobsEstimator=n_jobsEstimator,
         verbose=verbose,
-        learningUse=learningUse,
-        testingUse=testingUse,
-        saveFile=saveFile,
-        shouldSave=shouldSave):
+        learning_use=learning_use,
+        testing_use=testing_use,
+        save_file=save_file,
+        should_save=should_save):
 
-    randomState = None
-    if not randomClassif:
-        randomState = 100
+    rand_state = None
+    if not random_classif:
+        rand_state = 100
 
-    lsSize = learningUse
-    if learningUse > maxLearningSize:
-        lsSize = maxLearningSize
+    ls_size = learning_use
+    if learning_use > maxLearningSize:
+        ls_size = maxLearningSize
 
-    tsSize = testingUse
-    if testingUse > maxTestingSize:
-        tsSize = maxTestingSize
+    ts_size = testing_use
+    if testing_use > maxTestingSize:
+        ts_size = maxTestingSize
 
     #======INSTANTIATING========#
     #--RandConv--
-    randConvCoord = coordinatorRandConvFactory(
-        nbFilters=nb_filters,
-        filterPolicy=filterPolicy,
+    randConvCoord = randconv_factory(
+        nb_filters=nb_filters,
+        filter_policy=filter_policy,
         poolings=poolings,
         extractor=extractor,
-        nbSubwindows=nbSubwindows,
-        subwindowMinSizeRatio=subwindowMinSizeRatio,
-        subwindowMaxSizeRatio=subwindowMaxSizeRatio,
-        subwindowTargetWidth=subwindowTargetWidth,
-        subwindowTargetHeight=subwindowTargetHeight,
-        subwindowInterpolation=subwindowInterpolation,
-        includeOriginalImage=includeOriginalImage,
-        nbJobs=nbJobs,
+        nb_subwindows=nb_subwindows,
+        sw_min_size_ratio=sw_min_size_ratio,
+        sw_max_size_ratio=sw_max_size_ratio,
+        sw_target_width=sw_target_width,
+        sw_target_height=sw_target_height,
+        sw_interpolation=sw_interpolation,
+        include_original_img=include_original_img,
+        n_jobs=n_jobs,
         verbosity=verbosity,
-        tempFolder=tempFolder,
+        temp_folder=temp_folder,
         random=random)
 
     #--Extra-tree--
@@ -160,8 +159,8 @@ def run(nb_filters=nb_filters,
                                        min_samples_split=minSamplesSplit,
                                        min_samples_leaf=minSamplesLeaf,
                                        bootstrap=bootstrap,
-                                       n_jobs=nbJobsEstimator,
-                                       random_state=randomState,
+                                       n_jobs=n_jobsEstimator,
+                                       random_state=rand_state,
                                        verbose=verbose)
 
      #--Classifier
@@ -170,11 +169,11 @@ def run(nb_filters=nb_filters,
     #--Data--
     loader = CifarFromNumpies(learningSetDir, learningIndexFile)
     learningSet = FileImageBuffer(loader.getFiles(), NumpyImageLoader())
-    learningSet = learningSet[0:lsSize]
+    learningSet = learningSet[0:ls_size]
 
     loader = CifarFromNumpies(testingSetDir, testingIndexFile)
     testingSet = FileImageBuffer(loader.getFiles(), NumpyImageLoader())
-    testingSet = testingSet[0:tsSize]
+    testingSet = testingSet[0:ts_size]
 
     #=====COMPUTATION=====#
     #--Learning--#
@@ -182,7 +181,7 @@ def run(nb_filters=nb_filters,
     fitStart = time()
     classifier.fit(learningSet)
     fitEnd = time()
-    print "Learning done", formatDuration(fitEnd-fitStart)
+    print "Learning done", format_duration(fitEnd-fitStart)
     sys.stdout.flush()
 
     #--Testing--#
@@ -191,30 +190,30 @@ def run(nb_filters=nb_filters,
     y_prob, y_pred = classifier.predict_predict_proba(testingSet)
     predEnd = time()
     accuracy = classifier.accuracy(y_pred, y_truth)
-    confMat = classifier.confusionMatrix(y_pred, y_truth)
+    confMat = classifier.confusion_matrix(y_pred, y_truth)
 
     #====ANALYSIS=====#
-    importance, order = randConvCoord.importancePerFeatureGrp(baseClassif)
+    importance, order = randConvCoord.importance_per_feature_grp(baseClassif)
 
     print "==================RandConv================"
     print "-----------Filtering--------------"
     print "nb_filters", nb_filters
-    print "filterPolicy", filterPolicy
+    print "filter_policy", filter_policy
     print "----------Pooling--------------"
     print "poolings", poolings
     print "--------SW extractor----------"
-    print "#Subwindows", nbSubwindows
-    print "subwindowMinSizeRatio", subwindowMinSizeRatio
-    print "subwindowMaxSizeRatio", subwindowMaxSizeRatio
-    print "subwindowTargetWidth", subwindowTargetWidth
-    print "subwindowTargetHeight", subwindowTargetHeight
+    print "#Subwindows", nb_subwindows
+    print "sw_min_size_ratio", sw_min_size_ratio
+    print "sw_max_size_ratio", sw_max_size_ratio
+    print "sw_target_width", sw_target_width
+    print "sw_target_height", sw_target_height
     print "fixedSize", fixedSize
     print "------------Misc-----------------"
-    print "includeOriginalImage", includeOriginalImage
+    print "include_original_img", include_original_img
     print "random", random
-    print "tempFolder", tempFolder
+    print "temp_folder", temp_folder
     print "verbosity", verbosity
-    print "nbJobs", nbJobs
+    print "n_jobs", n_jobs
     print "--------ExtraTrees----------"
     print "nbTrees", nbTrees
     print "maxFeatures", maxFeatures
@@ -222,21 +221,21 @@ def run(nb_filters=nb_filters,
     print "minSamplesSplit", minSamplesSplit
     print "minSamplesLeaf", minSamplesLeaf
     print "bootstrap", bootstrap
-    print "nbJobsEstimator", nbJobsEstimator
+    print "n_jobsEstimator", n_jobsEstimator
     print "verbose", verbose
-    print "randomState", randomState
+    print "rand_state", rand_state
     print "------------Data---------------"
     print "LearningSet size", len(learningSet)
     print "TestingSet size", len(testingSet)
     print "-------------------------------"
-    if shouldSave:
-        print "saveFile", saveFile
-    print "Fit time", formatDuration(fitEnd-fitStart)
-    print "Classifcation time", formatDuration(predEnd-predStart)
+    if should_save:
+        print "save_file", save_file
+    print "Fit time", format_duration(fitEnd-fitStart)
+    print "Classifcation time", format_duration(predEnd-predStart)
     print "Accuracy", accuracy
 
-    if shouldSave:
-        np.save(saveFile, y_prob)
+    if should_save:
+        np.save(save_file, y_prob)
 
     return accuracy, confMat, importance, order
 

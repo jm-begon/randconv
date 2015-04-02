@@ -13,7 +13,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn.ensemble import RandomTreesEmbedding
 from progressmonitor import monitor_with
 
-from _compute_histogram import compute_histogram
+from ._compute_histogram import compute_histogram
 
 
 
@@ -102,7 +102,7 @@ class Classifier(object):
             This instance
         """
         #Updating the labels
-        y_user = image_buffer.getLabels()
+        y_user = image_buffer.get_labels()
         self._build_luts(y_user)
 
         #Extracting the features
@@ -341,7 +341,7 @@ class UnsupervisedVisualBagClassifier(Classifier):
             This instance
         """
         #Updating the labels
-        y_user = image_buffer.getLabels()
+        y_user = image_buffer.get_labels()
         self._build_luts(y_user)
         y = self._convet_labels(y_user)
 

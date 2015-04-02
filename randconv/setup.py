@@ -27,8 +27,6 @@ def configuration(parent_package="", top_path=None):
 
     config.add_subpackage("image")
     config.add_subpackage("util")
-
-
     config.add_subpackage('test')
 
     return config
