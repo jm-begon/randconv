@@ -396,7 +396,7 @@ def randconv_factory(
     #Type/policy parameters, #filters, random
     filter_policyType, filter_policyParam = filter_policy
     filter_generator = get_filter_generator(filter_policyType, filter_policyParam,
-                                         nb_filterss, random)
+                                            nb_filters, random)
 
     #Convolver
     convolver = RGBConvolver()

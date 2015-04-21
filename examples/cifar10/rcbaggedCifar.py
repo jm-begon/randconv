@@ -27,19 +27,19 @@ should_save = True
 #Filtering
 nb_filters = 38
 filter_policy = (Const.FGEN_CUSTOM, {"normalization":FilterGenerator.NORMALISATION_NONE})
-#filter_policy = (Const.FGEN_ZEROPERT, {"minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_RU, "normalization":FilterGenerator.NORMALISATION_NONE})
-#filter_policy = (Const.FGEN_ZEROPERT, {"minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_SET, "probLaw":[(-1, 0.3), (0, 0.4), (1, 0.3)], "normalization":FilterGenerator.NORMALISATION_NONE})
-#filter_policy = (Const.FGEN_IDPERT, {"minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_RU})
-#filter_policy = (Const.FGEN_IDPERT, {"minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_GAUSS, "outRange":0.05})
-#filter_policy = (Const.FGEN_IDDIST, {"minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_RU, "maxDist":5})
-#filter_policy = (Const.FGEN_STRAT, {"minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_GAUSS,  "outRange":0.001, "strat_nbCells":10, "minPerturbation":0, "maxPerturbation":1})
+#filter_policy = (Const.FGEN_ZEROPERT, {"min_size":2, "max_size":32, "min_val":-1, "max_val":1, "value_generator":Const.RND_RU, "normalization":FilterGenerator.NORMALISATION_NONE})
+#filter_policy = (Const.FGEN_ZEROPERT, {"min_size":2, "max_size":32, "min_val":-1, "max_val":1, "value_generator":Const.RND_SET, "probLaw":[(-1, 0.3), (0, 0.4), (1, 0.3)], "normalization":FilterGenerator.NORMALISATION_NONE})
+#filter_policy = (Const.FGEN_IDPERT, {"min_size":2, "max_size":32, "min_val":-1, "max_val":1, "value_generator":Const.RND_RU})
+#filter_policy = (Const.FGEN_IDPERT, {"min_size":2, "max_size":32, "min_val":-1, "max_val":1, "value_generator":Const.RND_GAUSS, "outRange":0.05})
+#filter_policy = (Const.FGEN_IDDIST, {"min_size":2, "max_size":32, "min_val":-1, "max_val":1, "value_generator":Const.RND_RU, "maxDist":5})
+#filter_policy = (Const.FGEN_STRAT, {"min_size":2, "max_size":32, "min_val":-1, "max_val":1, "value_generator":Const.RND_GAUSS,  "outRange":0.001, "strat_nbCells":10, "minPerturbation":0, "maxPerturbation":1})
 #
-#filter_policy = (Const.FGEN_ZEROPERT, {"sparseProb":0.25, "minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_RU, "normalization":FilterGenerator.NORMALISATION_NONE})
-#filter_policy = (Const.FGEN_ZEROPERT, {"sparseProb":0.25, "minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_SET, "probLaw":[(-1, 0.3), (0, 0.4), (1, 0.3)], "normalization":FilterGenerator.NORMALISATION_NONE})
-#filter_policy = (Const.FGEN_IDPERT, {"sparseProb":0.25, "minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_RU})
-#filter_policy = (Const.FGEN_IDPERT, {"sparseProb":0.25, "minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_GAUSS, "outRange":0.05})
-#filter_policy = (Const.FGEN_IDDIST, {"sparseProb":0.25, "minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_RU, "maxDist":5})
-#filter_policy = (Const.FGEN_STRAT, {"sparseProb":0.25, "minSize":2, "maxSize":32, "minVal":-1, "maxVal":1, "valGen":Const.RND_GAUSS,  "outRange":0.001, "strat_nbCells":10, "minPerturbation":minPerturbation, "maxPerturbation":maxPerturbation})
+#filter_policy = (Const.FGEN_ZEROPERT, {"sparseProb":0.25, "min_size":2, "max_size":32, "min_val":-1, "max_val":1, "value_generator":Const.RND_RU, "normalization":FilterGenerator.NORMALISATION_NONE})
+#filter_policy = (Const.FGEN_ZEROPERT, {"sparseProb":0.25, "min_size":2, "max_size":32, "min_val":-1, "max_val":1, "value_generator":Const.RND_SET, "probLaw":[(-1, 0.3), (0, 0.4), (1, 0.3)], "normalization":FilterGenerator.NORMALISATION_NONE})
+#filter_policy = (Const.FGEN_IDPERT, {"sparseProb":0.25, "min_size":2, "max_size":32, "min_val":-1, "max_val":1, "value_generator":Const.RND_RU})
+#filter_policy = (Const.FGEN_IDPERT, {"sparseProb":0.25, "min_size":2, "max_size":32, "min_val":-1, "max_val":1, "value_generator":Const.RND_GAUSS, "outRange":0.05})
+#filter_policy = (Const.FGEN_IDDIST, {"sparseProb":0.25, "min_size":2, "max_size":32, "min_val":-1, "max_val":1, "value_generator":Const.RND_RU, "maxDist":5})
+#filter_policy = (Const.FGEN_STRAT, {"sparseProb":0.25, "min_size":2, "max_size":32, "min_val":-1, "max_val":1, "value_generator":Const.RND_GAUSS,  "outRange":0.001, "strat_nbCells":10, "minPerturbation":minPerturbation, "maxPerturbation":maxPerturbation})
 
 #Aggregation
 poolings = [
