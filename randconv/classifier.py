@@ -58,7 +58,7 @@ class Classifier(object):
         self._classif2user_lut = user_labels
         self._user2classif_lut = {j: i for i, j in enumerate(user_labels)}
 
-    def _convet_labels(self, y_user):
+    def _convert_labels(self, y_user):
         """
         Convert labels from the user labels to the internal labels
         Parameters
@@ -70,9 +70,10 @@ class Classifier(object):
         y_classif : list
            the corresponding internal labels
         """
+        print self._user2classif_lut
         return [self._user2classif_lut[x] for x in y_user]
 
-    def _convet_labels_back(self, y_classif):
+    def _convert_labels_back(self, y_classif):
         """
         Convert labels back to the user labels
         Parameters
@@ -109,7 +110,7 @@ class Classifier(object):
         X, y_user = self._coord.process(image_buffer, learning_phase=True)
 
         #Converting the labels
-        y = self._convet_labels(y_user)
+        y = self._convert_labels(y_user)
 
         #Delegating the classification
         self._classifier.fit(X, y)
@@ -139,7 +140,7 @@ class Classifier(object):
         """
         y_prob = self.predict_proba(image_buffer)
         y_classif = np.argmax(y_prob, axis=1)
-        return y_prob, self._convet_labels_back(y_classif)
+        return y_prob, self._convert_labels_back(y_classif)
 
     @monitor_with("func.rc.Classifier", task_name="Classifying")
     def predict(self, image_buffer):
@@ -208,7 +209,7 @@ class Classifier(object):
 
     def _predict(self, X_pred, nb_objects):
         y_classif = np.argmax(self._predict_proba(X_pred, nb_objects), axis=1)
-        return self._convet_labels_back(y_classif)
+        return self._convert_labels_back(y_classif)
 
     def accuracy(self, y_pred, y_truth):
         """
@@ -261,7 +262,7 @@ class UnsupervisedVisualBagClassifier(Classifier):
 
     def __init__(self, coordinator, base_classifier, n_estimators=10,
                  max_depth=5, min_samples_split=2, min_samples_leaf=1,
-                 n_jobs=-1, random_state=None, verbose=0, min_density=None):
+                 n_jobs=-1, random_state=None, verbose=0):
         Classifier.__init__(self, coordinator, base_classifier)
         self.histoSize = 0
         self._visualBagger = RandomTreesEmbedding(n_estimators=n_estimators,
@@ -270,8 +271,7 @@ class UnsupervisedVisualBagClassifier(Classifier):
                                                   min_samples_leaf=min_samples_leaf,
                                                   n_jobs=n_jobs,
                                                   random_state=random_state,
-                                                  verbose=verbose,
-                                                  min_density=min_density)
+                                                  verbose=verbose)
 
     @monitor_with("func.rc.UVBClassif", task_name="Extracting features")
     def _preprocess(self, image_buffer, learning_phase):
@@ -280,7 +280,7 @@ class UnsupervisedVisualBagClassifier(Classifier):
         X_pred, y = self._coord.process(image_buffer,
                                         learning_phase=learning_phase)
 
-        y_user = self._convet_labels(y)
+        y_user = self._convert_labels(y)
 
         #Cleaning up
         self._coord.clean(y)
@@ -343,7 +343,7 @@ class UnsupervisedVisualBagClassifier(Classifier):
         #Updating the labels
         y_user = image_buffer.get_labels()
         self._build_luts(y_user)
-        y = self._convet_labels(y_user)
+        y = self._convert_labels(y_user)
 
         X = self._preprocess(image_buffer, learning_phase=True)
 
@@ -366,7 +366,7 @@ class UnsupervisedVisualBagClassifier(Classifier):
 
         X = self._preprocess(image_buffer, learning_phase=False)
         y_classif = self._classifier.predict(X)
-        return self._convet_labels_back(y_classif)
+        return self._convert_labels_back(y_classif)
 
     def predict_proba(self, image_buffer):
         """

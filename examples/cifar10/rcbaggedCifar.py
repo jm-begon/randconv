@@ -16,7 +16,7 @@ from randconv.image import (SubWindowExtractor, FilterGenerator,
                             FileImageBuffer, NumpyImageLoader)
 from progressmonitor import format_duration
 
-from .cifardb import *
+from cifardb import *
 
 
 #======HISTOGRAM=========#
@@ -53,7 +53,7 @@ poolings = [
 
 
 #Subwindow
-nb_subwindows = 20
+nb_subwindows = 10
 sw_min_size_ratio = 0.75
 sw_max_size_ratio = 1.
 sw_target_width = 16
@@ -81,16 +81,16 @@ verbose = 8
 maxLearningSize = 50000
 maxTestingSize = 10000
 
-learning_use = 50000
-learningSetDir = "learn/"
+learning_use = 500
+learningSetDir = "/home/jmbegon/jmbegon/code/work/learn/"
 learningIndexFile = "0index"
 
-testing_use = 10000
-testingSetDir = "test/"
+testing_use = 100
+testingSetDir = "/home/jmbegon/jmbegon/code/work/test/"
 testingIndexFile = "0index"
 
 
-def formatBigNumber(num):
+def format_big_numbers(num):
     revnum = str(num)[::-1]
     right = revnum
     rtn = ""
@@ -186,18 +186,13 @@ def run(nb_filters=nb_filters,
     #--Learning--#
     print "Starting learning"
     fitStart = time()
-    hist = classifier._preprocess(learningSet, learningPhase=True)
-    y = learningSet.getLabels()
-    if should_save:
-        np.savez(save_file, data=hist.data, indices=hist.indices,
-                 indptr=hist.indptr, shape=hist.shape)
-    classifier.fit_histogram(hist, y)
+    hist = classifier.fit(learningSet)
     fitEnd = time()
     print "Learning done", format_duration(fitEnd-fitStart)
     sys.stdout.flush()
 
     #--Testing--#
-    y_truth = testingSet.getLabels()
+    y_truth = testingSet.get_labels()
     predStart = time()
     y_pred = classifier.predict(testingSet)
     predEnd = time()
@@ -205,7 +200,7 @@ def run(nb_filters=nb_filters,
     confMat = classifier.confusion_matrix(y_pred, y_truth)
 
     #====ANALYSIS=====#
-    importance, order = randConvCoord.importancePerFeatureGrp(classifier._visualBagger)
+    importance, order = randConvCoord.importance_per_feature_grp(classifier._visualBagger)
 
     print "==================Bag of Visual Words======================="
     print "-----------Filtering--------------"
@@ -243,7 +238,7 @@ def run(nb_filters=nb_filters,
     print "Fit time", format_duration(fitEnd-fitStart)
     print "Classifcation time", format_duration(predEnd-predStart)
     print "Accuracy", accuracy
-    print "Leafs", formatBigNumber(classifier.histoSize)
+    print "Leafs", format_big_numbers(classifier.histoSize)
 
     return accuracy, confMat, importance, order
 

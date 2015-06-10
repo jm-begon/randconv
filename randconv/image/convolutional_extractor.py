@@ -95,7 +95,7 @@ class ConvolutionalExtractor:
 
         #Converting image in the right format
         convertor = NumpyPILConvertor()
-        image = convertor.pil_to_numpy(image)
+        image = convertor.pil2numpy(image)
 
         filtered = []
 
@@ -129,11 +129,11 @@ class ConvolutionalExtractor:
 
         for col, numpies in enumerate(filtered):
             #converting image to the right format
-            img = convertor.numpy_to_pil(numpies)
+            img = convertor.numpy2pil(numpies)
             #Extracting the subwindows s.s.
             subwindows = self._sw_extractor.extract(img)
             for row in xrange(nbSubWindow):
-                all_subwindows[row, col] = convertor.pil_to_numpy(subwindows[row])
+                all_subwindows[row][col] = convertor.pil2numpy(subwindows[row])
 
         return all_subwindows
 

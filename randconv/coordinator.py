@@ -220,12 +220,12 @@ class PyxitCoordinator(Coordinator):
 
         #Main loop
         for image, label in monitor_with("gen.rc.Coord.Pyxit")(image_buffer):
-            image = convertor.numpy_to_pil(image)
+            image = convertor.numpy2pil(image)
             imgLs = self._multi_sw_extractor.extract(image)
             #Filling the X and y
             for img in imgLs:
                 tmpRes = self._feature_extractor.extract(
-                    convertor.pil_to_numpy(img))
+                    convertor.pil2numpy(img))
                 X_res[index] = self._rescaler(tmpRes)
                 y_res[index] = label
                 index += 1

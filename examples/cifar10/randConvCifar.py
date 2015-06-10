@@ -22,7 +22,7 @@ should_save = True
 #======HYPER PARAMETERS======#
 #----RandConv param
 #Filtering
-nb_filters = 100
+nb_filters = 10
 #filter_policy = (Const.FGEN_ZEROPERT, {"min_size":2, "max_size":10, "min_val":-1, "max_val":1, "value_generator":Const.RND_RU, "normalization":FilterGenerator.NORMALISATION_NONE})
 filter_policy = (Const.FGEN_ZEROPERT, {"min_size":2, "max_size":32, "min_val":-1, "max_val":1, "value_generator":Const.RND_SET, "probLaw":[(-1, 0.3), (0, 0.4), (1, 0.3)], "normalization":FilterGenerator.NORMALISATION_NONE})
 #filter_policy = (Const.FGEN_IDPERT, {"min_size":2, "max_size":32, "min_val":-1, "max_val":1, "value_generator":Const.RND_RU})
@@ -83,11 +83,11 @@ maxLearningSize = 50000
 maxTestingSize = 10000
 
 learning_use = 500
-learningSetDir = "learn/"
+learningSetDir = "/home/jmbegon/jmbegon/code/work/learn/"
 learningIndexFile = "0index"
 
 testing_use = 100
-testingSetDir = "test/"
+testingSetDir = "/home/jmbegon/jmbegon/code/work/test/"
 testingIndexFile = "0index"
 
 
@@ -185,7 +185,7 @@ def run(nb_filters=nb_filters,
     sys.stdout.flush()
 
     #--Testing--#
-    y_truth = testingSet.getLabels()
+    y_truth = testingSet.get_labels()
     predStart = time()
     y_prob, y_pred = classifier.predict_predict_proba(testingSet)
     predEnd = time()

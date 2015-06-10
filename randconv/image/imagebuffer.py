@@ -12,7 +12,7 @@ except ImportError:
     from PIL import Image
 import numpy as np
 
-from .numpy_pil_converter import NumpyToPILConvertor
+from .numpy_pil_converter import NumpyToPILConvertor, PILToNumpyConvertor
 
 
 __all__ = ["ImageBuffer", "FileImageBuffer", "ImageLoader",
@@ -99,9 +99,9 @@ class ImageBuffer:
         self._imageSeq = imageIterator
         self._outputFormat = outputFormat
         if outputFormat == ImageBuffer.PIL_FORMAT:
-            self._convertor = NumpyToPILConvertor.NumpyToPILConvertor()
+            self._convertor = NumpyToPILConvertor()
         else:
-            self._convertor = NumpyToPILConvertor.PILToNumpyConvertor()
+            self._convertor = PILToNumpyConvertor()
 
     def size(self):
         """
